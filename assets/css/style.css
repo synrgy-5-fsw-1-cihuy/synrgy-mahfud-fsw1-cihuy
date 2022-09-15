@@ -1,0 +1,279 @@
+@import url(https://fonts.googleapis.com/css?family=Poppins:100,100italic,200,200italic,300,300italic,regular,italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic);
+* {
+  font-family: "Poppins", sans-serif;
+  scroll-behavior: smooth;
+  box-sizing: border-box;
+}
+a {
+  text-decoration: none;
+}
+
+header {
+  position: relative;
+  width: 100%;
+  height: auto;
+  left: 0px;
+  top: 0px;
+  background: #f1f3ff;
+}
+
+.logo {
+  width: 100px;
+  height: 34px;
+  transition: 1s;
+  /* Primary/DarkBlue/04 */
+  background: #0d28a6;
+  border-top-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  border-bottom-left-radius: 0rem;
+  border-top-right-radius: 0rem;
+}
+
+.logo:hover {
+  background: #740ad8;
+  border-bottom-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+  border-top-left-radius: 0rem;
+  border-bottom-right-radius: 0rem;
+}
+
+.nav-item {
+  font-weight: 500;
+  font-size: 16px;
+  transition: 0.3s ease-in-out;
+}
+
+.nav-item:hover {
+  transform: scale(1.05);
+  font-weight: 500;
+}
+
+.__register {
+  background-color: #5cb85f;
+  border-radius: 0.5rem;
+  transition: 1s;
+}
+
+.nav-item .__register:hover {
+  background: #92d094;
+}
+section {
+  min-height: 50vh;
+  width: 100%;
+  position: relative;
+  left: 0;
+  top: 0;
+}
+
+#home {
+  background: #f1f3ff;
+}
+
+/* Home / Hero Section */
+.container {
+  z-index: 10;
+  position: relative;
+}
+
+.__car {
+  transition: 0.5s ease-out;
+  z-index: 10;
+}
+
+.__car:hover {
+  transform: translate(0, -1rem);
+}
+
+.__stand {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 700px;
+  height: 200px;
+  z-index: 1;
+  border-top-left-radius: 30rem;
+}
+/* End Hero Section */
+
+/* Our Services */
+h2 {
+  font-weight: 700;
+  font-size: 24px;
+}
+
+p {
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.__osSuperiority {
+  border: none;
+  font-size: 14px;
+}
+
+.__osIcon {
+  border-radius: 50%;
+  padding: 0.2rem 0.4rem;
+  margin-right: 1rem;
+}
+
+li .__osIcon img {
+  width: 16px;
+  height: 16px;
+}
+/* End Our Services */
+
+/* Why Us */
+#whyUsSection h2,
+#whyUsSection p {
+  text-align: center;
+}
+
+.order-card {
+  color: #fff;
+}
+
+.bg-c-blue {
+  background: linear-gradient(45deg, #4099ff, #73b4ff);
+}
+
+.bg-c-green {
+  background: linear-gradient(45deg, #2ed8b6, #59e0c5);
+}
+
+.bg-c-yellow {
+  background: linear-gradient(45deg, #ffb64d, #ffcb80);
+}
+
+.bg-c-pink {
+  background: linear-gradient(45deg, #ff5370, #ff869a);
+}
+
+.card {
+  border-radius: 5px;
+  -webkit-box-shadow: 0 1px 2.94px 0.06px rgba(4, 26, 55, 0.16);
+  box-shadow: 0 1px 2.94px 0.06px rgba(4, 26, 55, 0.16);
+  border: none;
+  margin-bottom: 30px;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+.card .card-block {
+  padding: 20px;
+  height: 190px;
+}
+
+.order-card i {
+  font-size: 24px;
+  margin: 0 auto;
+}
+
+.__wuIcon {
+  border-radius: 50%;
+  padding: 0.6rem 0.7rem;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+/* End Why Us */
+
+/* Testimonials */
+#testimonials h2,
+#testimonials p {
+  text-align: center;
+}
+
+#testimonials img {
+  width: 150px;
+  height: 150px;
+}
+
+#testimonials .card {
+  width: 70%;
+  height: 30%;
+  background: #f1f3ff;
+  border: none;
+  border-radius: 1rem;
+  margin: 1rem auto;
+}
+
+.__preNext {
+  width: 3rem;
+  height: 3rem;
+  align-items: center;
+  margin: 0 10px;
+  bottom: 0;
+  position: relative;
+}
+
+.carousel-item p {
+  font-style: italic;
+}
+/* End Testimonials */
+
+/* Bonus Page */
+#bonuspage .card {
+  border-radius: 2rem;
+}
+/* End Bonus Page */
+
+/* FAQ */
+#faq .accordion-item,
+#faq .accordion,
+#faq .accordion-header {
+  border: none;
+}
+/* End FAQ */
+
+/* Footer */
+.__footerIcon {
+  border-radius: 50%;
+  padding: 0.2rem 0.4rem;
+  margin-right: 1rem;
+}
+
+li .__footerIcon i {
+  width: 16px;
+  height: 16px;
+}
+/* end Footer */
+
+/* Responsive */
+@media (max-width: 576px) {
+  .__stand {
+    max-width: 1320px;
+    width: 100%;
+    max-height: 180px;
+  }
+
+  .d-xs-block {
+    display: block !important;
+  }
+}
+
+@media (min-width: 576px) {
+  .__stand {
+    max-width: 1320px;
+    width: 100%;
+    max-height: 200px;
+  }
+}
+@media (min-width: 768px) {
+  .__stand {
+    max-width: 1500px;
+    width: 100%;
+  }
+}
+
+@media (min-width: 992px) {
+  .__stand {
+    max-width: 580px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .__stand {
+    max-width: 700px;
+  }
+}
