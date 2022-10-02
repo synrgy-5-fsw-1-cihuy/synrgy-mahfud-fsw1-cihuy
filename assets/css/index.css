@@ -21,10 +21,10 @@ nav {
     margin-right: 50px;
     background-color:  #F1F3FF;
 }
-.blueBoxBg {
+/* .blueBoxBg {
     width: 100px;
     height: 34px;
-}
+} */
 section {
     min-height: 50vh;
     width: 100%;
@@ -112,13 +112,19 @@ color: grey;
 }
 
 .blueRow {
-height: 326px;
-width: 1168px;
-left: 136px;
-top: 2078px;
+/* height: 326px;
+width: 1168px; */
+/* left: 136px;
+top: 2078px; */
 border-radius: 13px;
 background-color: blue;
 color: white;
+/* margin-left: 10px;
+margin-right: 10px; */
+}
+
+.btnSmall {
+    width: 200px;
 }
 
 
