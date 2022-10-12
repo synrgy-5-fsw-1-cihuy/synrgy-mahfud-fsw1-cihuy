@@ -4,7 +4,10 @@ function sortCarByYearDescendingly(cars) {
 
   // Clone array untuk menghindari side-effect
   // Apa itu side effect?
-  // side effect adalah kode yang menyebabkan peraubahan
+  /** 
+    side effect adalah Operasi apa pun yang 
+    tidak terkait langsung dengan hasil akhir fungsi
+  **/
   const result = [...cars];
 
   // Tulis code-mu disini
