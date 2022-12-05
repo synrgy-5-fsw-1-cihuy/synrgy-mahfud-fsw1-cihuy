@@ -1,105 +1,99 @@
 const formidableMiddleware = require('formidable');
-const models = require('../models/index.js');
-const Car = models.car;
+const carService = require("../service/carService.js");
+const jwtTokenUtil = require('../util/jwtUtil.js');
 
 const getAllCars = async (req, res) => {
-    const form = formidableMiddleware({ });
+    const cars = await carService.doGetAllCars();
 
-    await Car.findAll().then(result => {
-        res.status(200).json({message: "success", data: result});
-    }).catch(err => {
-        console.error(err);
-        res.status(500).json({message: "server error",data: null});
-    });
+    response.status(200).json({ data: cars });
 }
 
 const getSingleCar = async (req, res) => {
-    const id = req.params.id;
+    const carById = await carService.doGetCarById(request.params.id, response);
 
-    await Car.findByPk(id).then(result => {
-        if(result == null) {
-            res.status(404).json({message: "data not found",data: {}});
-            return;
-        }
-        res.status(200).json({data: result});
-    }).catch(err => {
-        console.error(err);
-        res.status(500).json({message: "server error",data: null});
-    });
+  if (carById == null) {
+    response
+      .status(404)
+      .json({ message: `Car not found with ids ${request.params.id}` });
+    return;
+  }
 }
 
 const addCar = async (req, res) => {
-    const form = formidableMiddleware({ });
+    const form = formidableMiddleware({});
 
-    await form.parse(request, (err, fields, files) => {
-        if (err) {
-            next(err);
-            return;
-        };
+  form.parse(request, async (err, fields, files) => {
+    if (err) {
+      next(err);
 
-        Car.create(fields).then(result => {
-            res.status(201).json({
-                message: "add car successfully",
-                data: fields
-            });
-        }).catch(err => {
-            console.log(err);
-            res.status(500).json({message: "server error",data: null});
-        });
+      return;
+    }
+
+    const authHeader = request.headers["authorization"];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    const decodedToken = await jwtTokenUtil.checkTokenJwt(token);
+
+    const carPayload = {
+      name: fields.name,
+      price: fields.price,
+      size: fields.size,
+      iamgeUrl : '-',
+      createdBy: decodedToken.email
+    };
+
+    const carSaved = await carService.doSaveCar(carPayload);
+
+    return response.status(201).json({
+        message: "Car successfully created", 
+        body: carSaved
     });
+  });
 }
 
-const updateCar = async (req, res) => {
-    const id = request.params.id;
-    const form = formidableMiddleware({ });
+// const updateCar = async (req, res) => {
+//     const id = request.params.id;
+//     const form = formidableMiddleware({ });
 
-    form.parse(request, (err, fields, files) => {
-        if (err) {
-            next(err);
-            return;
-        };
+//     form.parse(request, (err, fields, files) => {
+//         if (err) {
+//             next(err);
+//             return;
+//         };
 
-        Car.findByPk(id).then(result => {
-            if(result == null) {
-                res.status(404).json({message: "data not found",data: null});
-                return;
-            }
+//         Car.findByPk(id).then(result => {
+//             if(result == null) {
+//                 res.status(404).json({message: "data not found",data: null});
+//                 return;
+//             }
 
-            Car.update(fields, {where: {id: id}}).then(result => {
-                res.status(200).json({message: "success updated data",data: result});
-            }).catch(err => {
-                console.error(err);
-                res.status(500).json({message: "server error",data: null});
-                throw err;
-            });
+//             Car.update(fields, {where: {id: id}}).then(result => {
+//                 res.status(200).json({message: "success updated data",data: result});
+//             }).catch(err => {
+//                 console.error(err);
+//                 res.status(500).json({message: "server error",data: null});
+//                 throw err;
+//             });
             
-        }).catch(err => {
-            console.error(err);
-            res.status(500).json({message: "server error",data: null});
-            throw err;
-        });
+//         }).catch(err => {
+//             console.error(err);
+//             res.status(500).json({message: "server error",data: null});
+//             throw err;
+//         });
 
-    });
-}
+//     });
+// }
 
 const deleteCar = async(req, res) => {
-    const id = req.params.id;
+    const carById = await carService.doGetCarById(request.params.id);
 
-    Car.findByPk(id).then(result => {
-        if(result == null) {
-            res.status(404).json({message: "data nor found", data: {}});
-            return;
-        }
+  if (carById == null) {
+    return response.status(404).json({error: "Car not found"});
+  };
 
-        Post.destroy({where: {id}}).then(result => {
-            res.status(204).json({message: "succesfully deleted data", data: null});
-        });
-        
-    }).catch(err => {
-        console.error(err);
-        res.status(500).json({message: "server error", data: null});
-        throw err;
-    });
+  await carService.doDeleteCar(carById.id);
+
+  return response.status(204).json({data: ""});
 }
 
 module.exports = {
@@ -108,4 +102,4 @@ module.exports = {
     addCar,
     updateCar, 
     deleteCar
-};
+}
