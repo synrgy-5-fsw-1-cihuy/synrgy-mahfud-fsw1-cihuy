@@ -1,20 +1,61 @@
-const carRepository = require('../repository/car.repository.js');
+const carRepository = require('../repository/carRepository.js');
 
 
-const doGetAllCars = async () => {
+const getAllCars = async () => {
     return await carRepository.findAllCar();
 };
 
-const doGetCarById = async (id) => {
+const getCarById = async (id) => {
     return await carRepository.findCarById(id);
 };
 
-const doSaveCar = async (car) => {
-    return await carRepository.saveCar(car);
+const saveCar = async (car, creator) => {
+    const carData = {
+        ...car,
+        createdBy: creator.email
+      };
+    return await carRepository.saveCar(carData);
 };;
 
-const doDeleteCar = async (carId) => {
-    await carRepository.destroyCar(carId);
+const updateCar = async (car, carId) => {
+    let cekCarById = await carRepository.findCarById(carId);
+
+    if (cekCarById == null) {
+        return {
+            code: 404,
+            message: "Car Not Found",
+            data: null
+        };
+    } else {
+        await carRepository.updateCar()
+        
+        return {
+            code: 200,
+            message: "Success Updated Car",
+            data: cekCarById
+        }
+    }
+
+}
+
+const deleteCar = async (carId) => {
+    let cekCarById = await carRepository.findCarById(carId);
+
+    if (cekCarById == null) {
+        return {
+            code: 404,
+            message: "Car Not Found",
+            data: null
+        };
+    } else {
+        await carRepository.destroyCar(carId)
+        
+        return {
+            code: 200,
+            message: "Success Delete Car",
+            data: cekCarById
+        }
+    }
 };
 
-module.exports = {doGetAllCars, doGetCarById, doSaveCar, doDeleteCar};
+module.exports = {getAllCars, getCarById, saveCar, updateCar, deleteCar};
