@@ -11,7 +11,6 @@ const userController = require("../controller/userController.js");
  *              type: object
  *              required:
  *                  - id
- *                  - name
  *                  - email
  *                  - password
  *                  - role
@@ -19,9 +18,6 @@ const userController = require("../controller/userController.js");
  *                  id:
  *                      type: integer
  *                      description: Auto-generated id of the car
- *                  name:
- *                      type: string
- *                      description: The name of the car
  *                  email:
  *                      type: string
  *                      description: The price of the car
@@ -46,13 +42,9 @@ const userController = require("../controller/userController.js");
  *          UserRequest:
  *              type: object
  *              required:
- *                  - name
  *                  - email
  *                  - password
  *              properties:
- *                  name:
- *                      type: string
- *                      description: The name of the car
  *                  email:
  *                      type: string
  *                      description: The price of the car
@@ -82,7 +74,7 @@ const userController = require("../controller/userController.js");
 // Register Member
 /**
  * @swagger
- * /login:
+ * /register:
  *      post:
  *          summary: Login for user
  *          tags: [User]
