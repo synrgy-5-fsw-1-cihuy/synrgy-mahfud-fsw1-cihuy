@@ -103,7 +103,7 @@ const router = express.Router();
  *                          schema:
  *                              $ref: '#/components/schemas/Car'
  */ 
-router.get("/cars",authMiddleware, getAllCars);
+router.get("/api/cars",authMiddleware, getAllCars);
 
 /**
  * @swagger
@@ -128,7 +128,7 @@ router.get("/cars",authMiddleware, getAllCars);
  *                          schema:
  *                              $ref: '#/components/schemas/Car'
  */ 
-router.get("/car/:id", authMiddleware, getSingleCar);
+router.get("/api/car/:id", authMiddleware, getSingleCar);
 
 /**
  * @swagger
@@ -153,7 +153,7 @@ router.get("/car/:id", authMiddleware, getSingleCar);
  *                          schema:
  *                              $ref: '#/components/schemas/Car'
  */ 
-router.post("/car", authMiddleware, addCar);
+router.post("/api/car", authMiddleware, addCar);
 
 /**
  * @swagger
@@ -185,7 +185,7 @@ router.post("/car", authMiddleware, addCar);
  *                          schema:
  *                              $ref: '#/components/schemas/Car'
  */ 
-router.put("/car/:id", authMiddleware, updateCar);
+router.put("/api/car/:id", authMiddleware, updateCar);
 
 /**
  * @swagger
@@ -206,6 +206,6 @@ router.put("/car/:id", authMiddleware, updateCar);
  *              "204":
  *                  description: Car successfully deleted
  */ 
-router.delete("/car/:id", authMiddleware, deleteCar);
+router.delete("/api/car/:id", authMiddleware, deleteCar);
 
 module.exports = router;

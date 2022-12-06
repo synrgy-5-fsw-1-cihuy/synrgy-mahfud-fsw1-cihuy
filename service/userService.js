@@ -4,7 +4,7 @@ const jwtTokenUtil = require('../util/jwtUtil.js');
 const saltRounds = 10;
 
 const saveUser = async (email, password, role) => {
-    if (role != 'MEMBER' || role != 'ADMIN') {
+    if (role != 'MEMBER' && role != 'ADMIN') {
         return {
             code: 400,
             message: 'Role False, Choose ADMIN or MEMBER',
@@ -12,7 +12,7 @@ const saveUser = async (email, password, role) => {
         }
     }
 
-    let hashedPassword = await bcrypt.hash(fields.password, saltRounds);
+    let hashedPassword = await bcrypt.hash(password, saltRounds);
     let user = {
         email: email,
         password: hashedPassword,
@@ -23,7 +23,7 @@ const saveUser = async (email, password, role) => {
     return {
         code: 200,
         message: "Registered Successfully",
-        data: {...user}
+        data: {...user.dataValues}
     }    
 }
 
@@ -40,7 +40,7 @@ const getUserDetailByEmail = async (email) => {
         return {
             code: 200,
             message: 'User Account Found',
-            data: {...userByEmail}
+            data: {...userByEmail.dataValues}
         }
     }
 }
@@ -48,7 +48,7 @@ const getUserDetailByEmail = async (email) => {
 const getUserDetailById = async (userId) => {
     const userById = await userRepository.getUserById(userId);
 
-    if (userByEmail == null) {
+    if (userById.dataValues == null) {
         return {
             code: 404,
             message: 'User Account Not Found',
@@ -58,7 +58,7 @@ const getUserDetailById = async (userId) => {
         return {
             code: 200,
             message: 'User Account Found',
-            data: {...userById}
+            data: {...userById.dataValues}
         }
     }
 }
@@ -67,25 +67,16 @@ const getUserProfile = async (token) => {
     const decodedToken = await jwtTokenUtil.checkTokenJwt(token);
     let userDetail = await getUserDetailById(decodedToken.id);
 
-    if (userDetail = null) {
-        return {
-            code: 404,
-            message: 'User Not Found',
-            data: null
-        }
-    } else {
-        return {
-            code: 200,
-            message: 'User Found',
-            data: {...userDetail.data}
-        }
-    }
+    return userDetail;
 }
 
 const loginUser = async (email, password) => {
     const userByEmail = await getUserDetailByEmail(email);
 
-    const checkAccountPassword = await bcrypt.compare(fields.password, userByEmail.password);
+    if (userByEmail.code != 200) {
+        return userByEmail;
+    }
+    const checkAccountPassword = await bcrypt.compare(password, userByEmail.data.password);
 
     if (checkAccountPassword == false) { 
         return {
@@ -95,6 +86,9 @@ const loginUser = async (email, password) => {
         }
     }
 
+    delete userByEmail.data.createdAt;
+    delete userByEmail.data.updatedAt;
+    console.log(userByEmail.data);
     const tokenGenerated = jwtTokenUtil.encodeTokenJwt({
         ...userByEmail.data
     });

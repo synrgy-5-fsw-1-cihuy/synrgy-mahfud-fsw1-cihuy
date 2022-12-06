@@ -17,16 +17,16 @@ const userController = require("../controller/userController.js");
  *              properties:
  *                  id:
  *                      type: integer
- *                      description: Auto-generated id of the car
+ *                      description: Auto-generated id of the user
  *                  email:
  *                      type: string
- *                      description: The price of the car
+ *                      description: User Email
  *                  password:
  *                      type: string
- *                      description: The size of the car
+ *                      description: User Password
  *                  role:
  *                      type: string
- *                      description: The photo url of the car
+ *                      description: User Role
  *                  createdAt:
  *                      type: timestamp
  *                      description: The date the data was created
@@ -47,10 +47,10 @@ const userController = require("../controller/userController.js");
  *              properties:
  *                  email:
  *                      type: string
- *                      description: The price of the car
+ *                      description: Email User
  *                  password:
  *                      type: string
- *                      description: The size of the car
+ *                      description: Password User
  */ 
 
 /**
@@ -65,10 +65,32 @@ const userController = require("../controller/userController.js");
  *              properties:
  *                  email:
  *                      type: string
- *                      description: The price of the car
+ *                      description: Email User
  *                  password:
  *                      type: string
- *                      description: The size of the car
+ *                      description: Password User
+ */ 
+
+/**
+ * @swagger
+ * components:
+ *      schemas:
+ *          RegisterRequest:
+ *              type: object
+ *              required:
+ *                  - email
+ *                  - password
+ *                  - role
+ *              properties:
+ *                  email:
+ *                      type: string
+ *                      description: User Email
+ *                  password:
+ *                      type: string
+ *                      description: User Password
+ *                  role:
+ *                      type: string
+ *                      description: User Role
  */ 
 
 // Register Member
@@ -76,15 +98,15 @@ const userController = require("../controller/userController.js");
  * @swagger
  * /register:
  *      post:
- *          summary: Login for user
+ *          summary: Register for user
  *          tags: [User]
  *          requestBody:
- *              description: Input for login
+ *              description: Input for Register
  *              required: true
  *              content:
  *                  multipart/form-data:
  *                      schema:
- *                          $ref: '#/components/schemas/LoginRequest'
+ *                          $ref: '#/components/schemas/RegisterRequest'
  *          responses:
  *              "200":
  *                  description: Logged successfully
