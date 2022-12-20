@@ -1,598 +1,70 @@
-# Javascript: Array Challenge
+# Getting Started with Create React App
 
-Tugasmu disini adalah memodifikasi file-file berikut:
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-- [`scripts/filterCarByAvailability.js`](./scripts/filterCarByAvailability.js)
-- [`scripts/sortCarByYearAscendingly.js`](./scripts/sortCarByYearAscendingly.js)
-- [`scripts/sortCarByYearDecendingly.js`](./scripts/sortCarByYearDecendingly.js)
+## Available Scripts
 
-Dimana masing-masing file tersebut terdapat sebuah fungsi. Penjelasan terkait fungsi-fungsi tersebut dapat dilihat pada bagian selanjutnya.
+In the project directory, you can run:
 
-## `filterCarByAvailability`
+### `npm start`
 
-Disini kamu akan membuat sebuah fungsi yang berguna untuk menyaring daftar mobil,
-yang mana dari daftar mobil tersebut ketika sudah disaring,
-akan menyisakan daftar mobil yang mana dapat disewa.
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-### Input
+The page will reload when you make changes.\
+You may also see any lint errors in the console.
 
-Input dari fungsi ini kita panggil `cars`, dimana tipe datanya adalah array of object. Untuk type signature dari input tersebut dapat dilihat pada definisi tipe di bawah ini:
+### `npm test`
 
-```typescript
-type Car = {
-  id: string;
-  plate: string;
-  transmission: string;
-  manufacture: string;
-  model: string;
-  available: boolean;
-  type: string;
-  year: number;
-  options: string[];
-  specs: string[];
-};
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-type Cars = Array<Car>;
-```
+### `npm run build`
 
-Contoh input:
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-```json
-[
-  {
-    "id": "6e2bc663-5197-441a-957b-bc75e4a2da7c",
-    "plate": "DBH-3491",
-    "transmission": "Automatic",
-    "manufacture": "Ford",
-    "model": "F150",
-    "available": true,
-    "type": "Sedan",
-    "year": 2022,
-    "options": [
-      "Cruise Control",
-      "Tinted Glass",
-      "Tinted Glass",
-      "Tinted Glass",
-      "AM/FM Stereo"
-    ],
-    "specs": [
-      "Brake assist",
-      "Leather-wrapped shift knob",
-      "Glove box lamp",
-      "Air conditioning w/in-cabin microfilter",
-      "Body color folding remote-controlled pwr mirrors",
-      "Dual-stage front airbags w/occupant classification system"
-    ]
-  },
-  {
-    "id": "9ff03bbc-b18c-4ba7-8f3a-4c4b5c2f6c77",
-    "plate": "WXB-3984",
-    "transmission": "Automatic",
-    "manufacture": "BMW",
-    "model": "X5",
-    "available": false,
-    "type": "Convertible",
-    "year": 2019,
-    "options": [
-      "Keyless Entry",
-      "Power Windows",
-      "MP3 (Single Disc)",
-      "CD (Multi Disc)",
-      "Navigation"
-    ],
-    "specs": [
-      "Rear passenger map pockets",
-      "Electrochromic rearview mirror",
-      "Dual chrome exhaust tips",
-      "Locking glove box",
-      "Pwr front vented disc/rear drum brakes"
-    ]
-  },
-  {
-    "id": "bf6b5c43-1377-4ae0-8908-310c64266f81",
-    "plate": "OSL-4224",
-    "transmission": "Automanual",
-    "manufacture": "Lincoln",
-    "model": "MKZ",
-    "available": true,
-    "type": "Sedan",
-    "year": 2021,
-    "options": [
-      "Bucket Seats",
-      "Airbag: Passenger",
-      "Airbag: Driver",
-      "Power Seats",
-      "Airbag: Side",
-      "Antilock Brakes",
-      "CD (Multi Disc)"
-    ],
-    "specs": [
-      "Driver & front passenger map pockets",
-      "Direct-type tire pressure monitor system",
-      "Cargo area lamp",
-      "Glove box lamp",
-      "Silver finish interior door handles",
-      "Driver & front passenger advanced multistage airbags w/occupant sensors",
-      "Silver accent IP trim finisher -inc: silver shifter finisher",
-      "Fasten seat belt warning light/chime"
-    ]
-  }
-]
-```
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-### Output
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-Ketika data `cars` dimasukkan ke dalam fungsi `filterCarByAvailability`,
-maka hasil dari fungsi tersebut harus berupa `Array<Car>`
-juga yang mana tiap item-nya memiliki atribut `available` yang bernilai `true`.
+### `npm run eject`
 
-Contoh output:
+**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-```json
-[
-  {
-    "id": "6e2bc663-5197-441a-957b-bc75e4a2da7c",
-    "plate": "DBH-3491",
-    "transmission": "Automatic",
-    "manufacture": "Ford",
-    "model": "F150",
-    "available": true,
-    "type": "Sedan",
-    "year": 2022,
-    "options": [
-      "Cruise Control",
-      "Tinted Glass",
-      "Tinted Glass",
-      "Tinted Glass",
-      "AM/FM Stereo"
-    ],
-    "specs": [
-      "Brake assist",
-      "Leather-wrapped shift knob",
-      "Glove box lamp",
-      "Air conditioning w/in-cabin microfilter",
-      "Body color folding remote-controlled pwr mirrors",
-      "Dual-stage front airbags w/occupant classification system"
-    ]
-  },
-  {
-    "id": "bf6b5c43-1377-4ae0-8908-310c64266f81",
-    "plate": "OSL-4224",
-    "transmission": "Automanual",
-    "manufacture": "Lincoln",
-    "model": "MKZ",
-    "available": true,
-    "type": "Sedan",
-    "year": 2021,
-    "options": [
-      "Bucket Seats",
-      "Airbag: Passenger",
-      "Airbag: Driver",
-      "Power Seats",
-      "Airbag: Side",
-      "Antilock Brakes",
-      "CD (Multi Disc)"
-    ],
-    "specs": [
-      "Driver & front passenger map pockets",
-      "Direct-type tire pressure monitor system",
-      "Cargo area lamp",
-      "Glove box lamp",
-      "Silver finish interior door handles",
-      "Driver & front passenger advanced multistage airbags w/occupant sensors",
-      "Silver accent IP trim finisher -inc: silver shifter finisher",
-      "Fasten seat belt warning light/chime"
-    ]
-  }
-]
-```
+If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-## `sortCarByYearAscendingly`
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-Disini kamu akan membuat sebuah fungsi yang berguna untuk mensortir daftar mobil,
-dimana setelah fungsi ini dijalankan maka daftar mobil yang telah diurutkan dari umur mobil paling tua akan menjadi hasil dari fungsi tersebut.
+You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-### Input
+## Learn More
 
-Input dari fungsi ini kita panggil `cars`, dimana tipe datanya adalah array of object.
-Untuk type signature dari input tersebut dapat dilihat pada definisi tipe di bawah ini:
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-```typescript
-type Car = {
-  id: string;
-  plate: string;
-  transmission: string;
-  manufacture: string;
-  model: string;
-  available: boolean;
-  type: string;
-  year: number;
-  options: string[];
-  specs: string[];
-};
+To learn React, check out the [React documentation](https://reactjs.org/).
 
-type Cars = Array<Car>;
-```
+### Code Splitting
 
-Contoh input:
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-```json
-[
-  {
-    "id": "6e2bc663-5197-441a-957b-bc75e4a2da7c",
-    "plate": "DBH-3491",
-    "transmission": "Automatic",
-    "manufacture": "Ford",
-    "model": "F150",
-    "available": true,
-    "type": "Sedan",
-    "year": 2022,
-    "options": [
-      "Cruise Control",
-      "Tinted Glass",
-      "Tinted Glass",
-      "Tinted Glass",
-      "AM/FM Stereo"
-    ],
-    "specs": [
-      "Brake assist",
-      "Leather-wrapped shift knob",
-      "Glove box lamp",
-      "Air conditioning w/in-cabin microfilter",
-      "Body color folding remote-controlled pwr mirrors",
-      "Dual-stage front airbags w/occupant classification system"
-    ]
-  },
-  {
-    "id": "9ff03bbc-b18c-4ba7-8f3a-4c4b5c2f6c77",
-    "plate": "WXB-3984",
-    "transmission": "Automatic",
-    "manufacture": "BMW",
-    "model": "X5",
-    "available": false,
-    "type": "Convertible",
-    "year": 2019,
-    "options": [
-      "Keyless Entry",
-      "Power Windows",
-      "MP3 (Single Disc)",
-      "CD (Multi Disc)",
-      "Navigation"
-    ],
-    "specs": [
-      "Rear passenger map pockets",
-      "Electrochromic rearview mirror",
-      "Dual chrome exhaust tips",
-      "Locking glove box",
-      "Pwr front vented disc/rear drum brakes"
-    ]
-  },
-  {
-    "id": "bf6b5c43-1377-4ae0-8908-310c64266f81",
-    "plate": "OSL-4224",
-    "transmission": "Automanual",
-    "manufacture": "Lincoln",
-    "model": "MKZ",
-    "available": true,
-    "type": "Sedan",
-    "year": 2021,
-    "options": [
-      "Bucket Seats",
-      "Airbag: Passenger",
-      "Airbag: Driver",
-      "Power Seats",
-      "Airbag: Side",
-      "Antilock Brakes",
-      "CD (Multi Disc)"
-    ],
-    "specs": [
-      "Driver & front passenger map pockets",
-      "Direct-type tire pressure monitor system",
-      "Cargo area lamp",
-      "Glove box lamp",
-      "Silver finish interior door handles",
-      "Driver & front passenger advanced multistage airbags w/occupant sensors",
-      "Silver accent IP trim finisher -inc: silver shifter finisher",
-      "Fasten seat belt warning light/chime"
-    ]
-  }
-]
-```
+### Analyzing the Bundle Size
 
-### Output
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-Ketika data `cars` dimasukkan ke dalam fungsi `sortCarByYearAscendingly`,
-maka hasil dari fungsi tersebut harus berupa `Array<Car>` juga,
-yang mana tiap item harus memiliki atribut year paling tua dibanding item-item berikutnya di dalam daftar tersebut.
+### Making a Progressive Web App
 
-Contoh output:
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-```json
-[
-  {
-    "id": "9ff03bbc-b18c-4ba7-8f3a-4c4b5c2f6c77",
-    "plate": "WXB-3984",
-    "transmission": "Automatic",
-    "manufacture": "BMW",
-    "model": "X5",
-    "available": false,
-    "type": "Convertible",
-    "year": 2019,
-    "options": [
-      "Keyless Entry",
-      "Power Windows",
-      "MP3 (Single Disc)",
-      "CD (Multi Disc)",
-      "Navigation"
-    ],
-    "specs": [
-      "Rear passenger map pockets",
-      "Electrochromic rearview mirror",
-      "Dual chrome exhaust tips",
-      "Locking glove box",
-      "Pwr front vented disc/rear drum brakes"
-    ]
-  },
-  {
-    "id": "bf6b5c43-1377-4ae0-8908-310c64266f81",
-    "plate": "OSL-4224",
-    "transmission": "Automanual",
-    "manufacture": "Lincoln",
-    "model": "MKZ",
-    "available": true,
-    "type": "Sedan",
-    "year": 2021,
-    "options": [
-      "Bucket Seats",
-      "Airbag: Passenger",
-      "Airbag: Driver",
-      "Power Seats",
-      "Airbag: Side",
-      "Antilock Brakes",
-      "CD (Multi Disc)"
-    ],
-    "specs": [
-      "Driver & front passenger map pockets",
-      "Direct-type tire pressure monitor system",
-      "Cargo area lamp",
-      "Glove box lamp",
-      "Silver finish interior door handles",
-      "Driver & front passenger advanced multistage airbags w/occupant sensors",
-      "Silver accent IP trim finisher -inc: silver shifter finisher",
-      "Fasten seat belt warning light/chime"
-    ]
-  },
-  {
-    "id": "6e2bc663-5197-441a-957b-bc75e4a2da7c",
-    "plate": "DBH-3491",
-    "transmission": "Automatic",
-    "manufacture": "Ford",
-    "model": "F150",
-    "available": true,
-    "type": "Sedan",
-    "year": 2022,
-    "options": [
-      "Cruise Control",
-      "Tinted Glass",
-      "Tinted Glass",
-      "Tinted Glass",
-      "AM/FM Stereo"
-    ],
-    "specs": [
-      "Brake assist",
-      "Leather-wrapped shift knob",
-      "Glove box lamp",
-      "Air conditioning w/in-cabin microfilter",
-      "Body color folding remote-controlled pwr mirrors",
-      "Dual-stage front airbags w/occupant classification system"
-    ]
-  }
-]
-```
+### Advanced Configuration
 
-## `sortCarByYearDescendingly`
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-Disini kamu akan membuat sebuah fungsi yang berguna untuk mensortir daftar mobil,
-dimana setelah fungsi ini dijalankan maka daftar mobil yang telah diurutkan dari umur mobil paling muda akan menjadi hasil dari fungsi tersebut.
+### Deployment
 
-### Input
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-Input dari fungsi ini kita panggil `cars`, dimana tipe datanya adalah array of object.
-Untuk type signature dari input tersebut dapat dilihat pada definisi tipe di bawah ini:
+### `npm run build` fails to minify
 
-```typescript
-type Car = {
-  id: string;
-  plate: string;
-  transmission: string;
-  manufacture: string;
-  model: string;
-  available: boolean;
-  type: string;
-  year: number;
-  options: string[];
-  specs: string[];
-};
-
-type Cars = Array<Car>;
-```
-
-Contoh input:
-
-```json
-[
-  {
-    "id": "6e2bc663-5197-441a-957b-bc75e4a2da7c",
-    "plate": "DBH-3491",
-    "transmission": "Automatic",
-    "manufacture": "Ford",
-    "model": "F150",
-    "available": true,
-    "type": "Sedan",
-    "year": 2022,
-    "options": [
-      "Cruise Control",
-      "Tinted Glass",
-      "Tinted Glass",
-      "Tinted Glass",
-      "AM/FM Stereo"
-    ],
-    "specs": [
-      "Brake assist",
-      "Leather-wrapped shift knob",
-      "Glove box lamp",
-      "Air conditioning w/in-cabin microfilter",
-      "Body color folding remote-controlled pwr mirrors",
-      "Dual-stage front airbags w/occupant classification system"
-    ]
-  },
-  {
-    "id": "9ff03bbc-b18c-4ba7-8f3a-4c4b5c2f6c77",
-    "plate": "WXB-3984",
-    "transmission": "Automatic",
-    "manufacture": "BMW",
-    "model": "X5",
-    "available": false,
-    "type": "Convertible",
-    "year": 2019,
-    "options": [
-      "Keyless Entry",
-      "Power Windows",
-      "MP3 (Single Disc)",
-      "CD (Multi Disc)",
-      "Navigation"
-    ],
-    "specs": [
-      "Rear passenger map pockets",
-      "Electrochromic rearview mirror",
-      "Dual chrome exhaust tips",
-      "Locking glove box",
-      "Pwr front vented disc/rear drum brakes"
-    ]
-  },
-  {
-    "id": "bf6b5c43-1377-4ae0-8908-310c64266f81",
-    "plate": "OSL-4224",
-    "transmission": "Automanual",
-    "manufacture": "Lincoln",
-    "model": "MKZ",
-    "available": true,
-    "type": "Sedan",
-    "year": 2021,
-    "options": [
-      "Bucket Seats",
-      "Airbag: Passenger",
-      "Airbag: Driver",
-      "Power Seats",
-      "Airbag: Side",
-      "Antilock Brakes",
-      "CD (Multi Disc)"
-    ],
-    "specs": [
-      "Driver & front passenger map pockets",
-      "Direct-type tire pressure monitor system",
-      "Cargo area lamp",
-      "Glove box lamp",
-      "Silver finish interior door handles",
-      "Driver & front passenger advanced multistage airbags w/occupant sensors",
-      "Silver accent IP trim finisher -inc: silver shifter finisher",
-      "Fasten seat belt warning light/chime"
-    ]
-  }
-]
-```
-
-### Output
-
-Ketika data `cars` dimasukkan ke dalam fungsi `sortCarByYearDescendingly`,
-maka hasil dari fungsi tersebut harus berupa `Array<Car>` juga,
-yang mana tiap item harus memiliki atribut `year` paling muda dibanding item-item berikutnya di dalam daftar tersebut.
-
-Contoh output:
-
-```json
-[
-  {
-    "id": "6e2bc663-5197-441a-957b-bc75e4a2da7c",
-    "plate": "DBH-3491",
-    "transmission": "Automatic",
-    "manufacture": "Ford",
-    "model": "F150",
-    "available": true,
-    "type": "Sedan",
-    "year": 2022,
-    "options": [
-      "Cruise Control",
-      "Tinted Glass",
-      "Tinted Glass",
-      "Tinted Glass",
-      "AM/FM Stereo"
-    ],
-    "specs": [
-      "Brake assist",
-      "Leather-wrapped shift knob",
-      "Glove box lamp",
-      "Air conditioning w/in-cabin microfilter",
-      "Body color folding remote-controlled pwr mirrors",
-      "Dual-stage front airbags w/occupant classification system"
-    ]
-  },
-  {
-    "id": "bf6b5c43-1377-4ae0-8908-310c64266f81",
-    "plate": "OSL-4224",
-    "transmission": "Automanual",
-    "manufacture": "Lincoln",
-    "model": "MKZ",
-    "available": true,
-    "type": "Sedan",
-    "year": 2021,
-    "options": [
-      "Bucket Seats",
-      "Airbag: Passenger",
-      "Airbag: Driver",
-      "Power Seats",
-      "Airbag: Side",
-      "Antilock Brakes",
-      "CD (Multi Disc)"
-    ],
-    "specs": [
-      "Driver & front passenger map pockets",
-      "Direct-type tire pressure monitor system",
-      "Cargo area lamp",
-      "Glove box lamp",
-      "Silver finish interior door handles",
-      "Driver & front passenger advanced multistage airbags w/occupant sensors",
-      "Silver accent IP trim finisher -inc: silver shifter finisher",
-      "Fasten seat belt warning light/chime"
-    ]
-  },
-  {
-    "id": "9ff03bbc-b18c-4ba7-8f3a-4c4b5c2f6c77",
-    "plate": "WXB-3984",
-    "transmission": "Automatic",
-    "manufacture": "BMW",
-    "model": "X5",
-    "available": false,
-    "type": "Convertible",
-    "year": 2019,
-    "options": [
-      "Keyless Entry",
-      "Power Windows",
-      "MP3 (Single Disc)",
-      "CD (Multi Disc)",
-      "Navigation"
-    ],
-    "specs": [
-      "Rear passenger map pockets",
-      "Electrochromic rearview mirror",
-      "Dual chrome exhaust tips",
-      "Locking glove box",
-      "Pwr front vented disc/rear drum brakes"
-    ]
-  }
-]
-```
-
-# Tips
-
-Happy coding!
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
