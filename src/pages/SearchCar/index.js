@@ -1,60 +1,148 @@
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
-import React from 'react'
-import { useState } from 'react';
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { category } from '../../jsonData/categoryList';
-import { harga } from '../../jsonData/priceList';
-import { status } from '../../jsonData/sewaList';
-import { Footer, Header } from "../../components/organism";
-import { getCars } from "../../redux/actions/posts";
-import Loading from "../Loading/Search";
-import Card from "./Card";
-import SearchBox from "./SearchBox";
 
-function SearchCar() {
-  const { posts, isLoading } = useSelector((state) => state.posts);
-  const [ data2, setData ] = useState([])
-  const dispatch = useDispatch()
-  const URL = `https://bootcamp-rent-car.herokuapp.com/admin/car`
-  const data_api = () => {
-    axios.get(URL).then(res => {
-      setData(res.data)
-    })
-  }
+const CARS_ENDPOINT_URL = 'http://localhost:8001/api/cars';
+
+const SearchCar = () => {
+  const [cars, setCars] = useState([]);
+  const [filterCarParams, setFilterCar] = useState({});
+
   useEffect(() => {
-    window.scrollTo({
-      top: 450,
-      behavior: "smooth"
-    })
-    data_api()
-    dispatch(getCars())
-  }, [dispatch])
+    getAllCars();
+  }, []);
 
-  const props = {
-    category,
-    harga,
-    status,
-    posts,
-    data2
-  }
-  console.debug(posts);
-  return isLoading ? (
-    <Loading />
-  ) : (
-    <>
-      <Header />
-      <SearchBox {...props} />
-      <div className="flex justify-center dark:bg-gray-800 dark:text-white">
-        <div className="w-full lg:w-4/5 grid grid-col-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-          {posts.length > 0 && posts?.map((item) => (
-            <Card key={item.id} item={item} />
-          ))}
-        </div>
-      </div>
-      <Footer />
-    </>
+  const getAllCars = async () => {
+    const cars = await axios.get(CARS_ENDPOINT_URL);
+    console.log(cars.data.data);
+    setCars(cars.data.data);
+  };
+
+  const onFilterCarCapacityParam = async (event) => {
+    const capacityParam = event.target.value;
+
+    if (capacityParam === null || capacityParam === '') {
+      getAllCars();
+    }
+
+    setFilterCar((prevState) => ({
+      ...prevState,
+      capacity: capacityParam
+    }));
+  };
+
+  const onFilterCarBookingDateParam = async (event) => {
+    const bookingDateParam = event.target.value;
+
+    if (bookingDateParam === null || bookingDateParam === '') {
+      getAllCars();
+    }
+
+    setFilterCar((prevState) => ({
+      ...prevState,
+      booking_date: event.target.value
+    }));
+  };
+
+  const onFilterCarBookingTimeParam = async (event) => {
+    const bookingTimeParam = event.target.value;
+
+    if (bookingTimeParam === null || bookingTimeParam === '') {
+      getAllCars();
+    }
+
+    setFilterCar((prevState) => ({
+      ...prevState,
+      booking_time: event.target.value
+    }));
+  };
+
+  const onEventSubmitFilter = (event) => {
+    if (filterCarParams.booking_date != null && filterCarParams.booking_time != null) {
+      const bookingDateParam =
+        filterCarParams.booking_date + 'T' + filterCarParams.booking_time + ':00Z';
+
+      console.log(bookingDateParam);
+
+      setFilterCar((prevState) => ({
+        ...prevState,
+        booking_date_parsed: bookingDateParam
+      }));
+    }
+
+    onShowFilterCars(filterCarParams);
+    console.log(filterCarParams);
+
+    event.preventDefault();
+  };
+
+  const onShowFilterCars = async (filter) => {
+    if (filter.capacity != null) {
+      const cars = await axios.get(CARS_ENDPOINT_URL + '?capacity=' + filter.capacity);
+      setCars(cars.data.data);
+    }
+
+    if (filter.booking_date_parsed != null) {
+      const filterCarsBookingDate = await axios.get(
+        CARS_ENDPOINT_URL + '?bookingDate=' + filter.booking_date_parsed
+      );
+      setCars(filterCarsBookingDate.data.data);
+    }
+  };
+
+  return (
+    <div>
+      <Container>
+        <form onSubmit={(event) => onEventSubmitFilter(event)}>
+          <div>
+            <label>Filter by capacity</label>
+            <input type="number" onChange={(event) => onFilterCarCapacityParam(event)} />
+          </div>
+          <div>
+            <label>Filter by Date</label>
+            <input type="date" onChange={(event) => onFilterCarBookingDateParam(event)} />
+          </div>
+          <div>
+            <label>Filter by Time</label>
+            <select onChange={(event) => onFilterCarBookingTimeParam(event)}>
+              <option>Select waktu</option>
+              <option value="08:00">08.00</option>
+              <option value="09:00">09.00</option>
+              <option value="10:00">10.00</option>
+              <option value="11:00">11.00</option>
+              <option value="12:00">12.00</option>
+            </select>
+          </div>
+          <div>
+            <button type="submit">Submit</button>
+          </div>
+        </form>
+        <Row>
+          {cars.map((car, index) => {
+            return (
+              <Col key={index}>
+                <Card style={{ width: '18rem' }}>
+                  <Card.Img variant="top" src={car.foto} />
+                  <Card.Body>
+                    <Card.Title>{car.name}</Card.Title>
+                    <b>
+                      <p>Rp. {car.price}</p> / hari
+                    </b>
+                    <Card.Text>Capacity {car.capacity}</Card.Text>
+
+                    <Button variant="primary">Go somewhere</Button>
+                  </Card.Body>
+                </Card>
+              </Col>
+            );
+          })}
+        </Row>
+      </Container>
+    </div>
   );
-}
-
+};
 export default SearchCar;
